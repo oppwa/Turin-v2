@@ -20,19 +20,16 @@
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Outfit', sans-serif; display: flex; height: 100vh; overflow: hidden; }
 button { font-family: inherit; cursor: pointer; border: none; background: none; }
-input { font-family: inherit; width: 100%; padding: 12px 16px; border: 1px solid var(--border); border-radius: 10px; background: var(--panel); color: var(--text); font-size: 16px; }
-input:focus { outline: 2px solid var(--brand); border-color: transparent; }
+input, select { font-family: inherit; width: 100%; padding: 12px 16px; border: 1px solid var(--border); border-radius: 10px; background: var(--panel); color: var(--text); font-size: 15px; margin-bottom: 12px; }
+input:focus, select:focus { outline: 2px solid var(--brand); border-color: transparent; }
 
-/* Layout General */
+/* Layout */
 .sidebar { width: 80px; background: var(--panel); border-right: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; padding: 20px 0; gap: 20px; z-index: 10; }
 .sidebar button { width: 48px; height: 48px; border-radius: 12px; display: grid; place-items: center; font-size: 24px; color: var(--muted); transition: 0.2s; }
 .sidebar button.active { background: var(--brand); color: white; box-shadow: 0 4px 12px rgba(15, 118, 110, 0.3); }
 .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-
-/* Header */
 header { padding: 16px 24px; background: var(--panel); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
 header h1 { margin: 0; font-size: 20px; font-weight: 700; }
-.user-info { display: flex; align-items: center; gap: 12px; font-size: 14px; font-weight: 500; }
 
 /* POS Grid */
 .pos-container { display: grid; grid-template-columns: 1fr 380px; flex: 1; overflow: hidden; }
@@ -57,21 +54,27 @@ header h1 { margin: 0; font-size: 20px; font-weight: 700; }
 .qty-controls button { width: 28px; height: 28px; border-radius: 50%; background: var(--panel); font-weight: 700; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
 .cart-footer { padding: 24px; border-top: 1px solid var(--border); background: var(--panel); }
 .total-row { display: flex; justify-content: space-between; font-size: 24px; font-weight: 700; margin-bottom: 20px; }
-.btn-primary { width: 100%; padding: 16px; border-radius: 12px; background: var(--brand); color: white; font-size: 18px; font-weight: 700; transition: background 0.2s; }
+.btn-primary { width: 100%; padding: 16px; border-radius: 12px; background: var(--brand); color: white; font-size: 16px; font-weight: 700; transition: background 0.2s; }
 .btn-primary:hover { background: var(--brand-hover); }
 .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
 
-/* Login Overlay */
+/* Admin Forms */
+.admin-container { padding: 24px; overflow-y: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+.panel { background: var(--panel); padding: 24px; border-radius: 16px; border: 1px solid var(--border); box-shadow: var(--shadow); }
+.panel h2 { margin-top: 0; font-size: 20px; margin-bottom: 20px; }
+.lista-insumos { margin-bottom: 16px; max-height: 150px; overflow-y: auto; border: 1px solid var(--border); border-radius: 10px; padding: 10px; }
+.insumo-row { display: flex; gap: 10px; align-items: center; margin-bottom: 8px; }
+.insumo-row input { margin-bottom: 0; padding: 8px; }
+.btn-add { background: var(--text); color: var(--bg); padding: 8px 16px; border-radius: 8px; font-weight: bold; margin-bottom: 20px;}
+.btn-danger { background: var(--danger); color: white; padding: 4px 8px; border-radius: 6px; font-size: 12px;}
+
+/* Login */
 .login-screen { position: fixed; inset: 0; background: var(--bg); z-index: 100; display: grid; place-items: center; }
 .login-box { background: var(--panel); padding: 40px; border-radius: 24px; width: 100%; max-width: 400px; box-shadow: var(--shadow); }
 .login-box h1 { margin: 0 0 8px 0; font-size: 28px; }
 .login-box p { color: var(--muted); margin: 0 0 24px 0; }
 .login-box label { display: block; font-size: 14px; font-weight: 500; margin: 16px 0 8px 0; }
 .err { color: var(--danger); font-size: 14px; margin-top: 12px; display: none; }
-
-/* Modals y Utilidades */
-.modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); display: grid; place-items: center; z-index: 50; padding: 20px; }
-.modal-box { background: var(--panel); border-radius: 20px; padding: 28px; width: 100%; max-width: 420px; box-shadow: var(--shadow); }
 .hide { display: none !important; }
 .toast { position: fixed; top: 24px; right: 24px; background: var(--text); color: var(--bg); padding: 12px 24px; border-radius: 12px; font-weight: 500; z-index: 200; box-shadow: var(--shadow); animation: slideIn 0.3s; }
 @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
@@ -79,11 +82,11 @@ header h1 { margin: 0; font-size: 20px; font-weight: 700; }
 </head>
 <body>
 
-<!-- PANTALLA DE LOGIN -->
+<!-- LOGIN -->
 <div id="loginScreen" class="login-screen">
   <div class="login-box">
     <h1>Turin ☕</h1>
-    <p>Ingresa a tu cuenta para comenzar</p>
+    <p>Ingresa a tu cuenta</p>
     <label>Correo</label>
     <input id="email" type="email" placeholder="tu@correo.com">
     <label>Contraseña</label>
@@ -93,38 +96,28 @@ header h1 { margin: 0; font-size: 20px; font-weight: 700; }
   </div>
 </div>
 
-<!-- APP PRINCIPAL -->
+<!-- APP -->
 <div id="app" class="hide" style="display: flex; width: 100%;">
-  
-  <!-- BARRA LATERAL -->
   <aside class="sidebar">
     <button class="active" data-view="pos" title="Ventas">🛒</button>
-    <button data-view="inv" title="Inventario">📦</button>
-    <button data-view="rep" title="Reportes">📊</button>
+    <button data-view="admin" title="Administración">⚙️</button>
     <button id="btnLogout" style="margin-top: auto; color: var(--danger);" title="Salir">🚪</button>
   </aside>
 
-  <!-- CONTENIDO -->
   <div class="main">
     <header>
-      <h1>Punto de Venta</h1>
-      <div class="user-info">
-        <span id="userName">Cajero</span>
-      </div>
+      <h1 id="viewTitle">Punto de Venta</h1>
+      <div class="user-info"><span id="userName">Cajero</span></div>
     </header>
 
+    <!-- VISTA POS -->
     <div class="pos-container" id="view-pos">
-      <!-- Productos -->
       <div class="products-area">
         <div class="categories" id="categories">
           <button class="active" data-cat="all">Todas</button>
         </div>
-        <div class="grid" id="productsGrid">
-          <!-- Se llena con JS -->
-        </div>
+        <div class="grid" id="productsGrid"></div>
       </div>
-
-      <!-- Carrito -->
       <div class="cart-area">
         <div class="cart-header">
           <h3 style="margin:0;">Comanda Actual</h3>
@@ -134,144 +127,158 @@ header h1 { margin: 0; font-size: 20px; font-weight: 700; }
           <p style="color: var(--muted); text-align: center; margin-top: 40px;">Selecciona productos</p>
         </div>
         <div class="cart-footer">
-          <div class="total-row">
-            <span>Total</span>
-            <span id="cartTotal">S/ 0.00</span>
-          </div>
+          <div class="total-row"><span>Total</span><span id="cartTotal">S/ 0.00</span></div>
           <button class="btn-primary" id="btnPay" disabled>Cobrar</button>
         </div>
       </div>
     </div>
+
+    <!-- VISTA ADMINISTRACIÓN -->
+    <div class="admin-container hide" id="view-admin">
+      
+      <!-- Formulario Insumos -->
+      <div class="panel">
+        <h2>📦 Crear Insumo</h2>
+        <label>Nombre (Ej. Café en grano, Leche, Vaso 8oz)</label>
+        <input id="ins_nombre" type="text">
+        <label>Unidad (g, ml, unidad)</label>
+        <input id="ins_unidad" type="text">
+        <label>Stock Inicial</label>
+        <input id="ins_stock" type="number" value="0">
+        <label>Stock Mínimo (Alerta)</label>
+        <input id="ins_min" type="number" value="0">
+        <button class="btn-primary" id="btnSaveInsumo" style="margin-top: 12px;">Guardar Insumo</button>
+      </div>
+
+      <!-- Formulario Productos -->
+      <div class="panel">
+        <h2>☕ Crear Producto con Receta</h2>
+        <label>Nombre del Producto</label>
+        <input id="prod_nombre" type="text">
+        <label>Categoría (Ej. Cafetería, Postres)</label>
+        <input id="prod_categoria" type="text" list="cats-list">
+        <datalist id="cats-list"></datalist>
+        <label>Precio de Venta (S/)</label>
+        <input id="prod_precio" type="number" step="0.1">
+        
+        <label style="margin-top: 20px; display: block;">Receta (Insumos obligatorios)</label>
+        <div class="lista-insumos" id="lista_insumos">
+          <!-- Aquí se agregan dinámicamente los selects -->
+        </div>
+        <button class="btn-add" id="btnAddInsumo">+ Agregar Insumo</button>
+        
+        <button class="btn-primary" id="btnSaveProducto">Guardar Producto y Receta</button>
+      </div>
+
+    </div>
+
   </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script>
-  // ==============================================================
-  // CONFIGURACIÓN DE SUPABASE (PEGA AQUÍ TUS NUEVOS DATOS)
-  // ==============================================================
-  const SUPABASE_URL = 'PEGA_AQUI_TU_NUEVA_URL';
-  const SUPABASE_KEY = 'PEGA_AQUI_TU_NUEVA_CLAVE_ANON';
-  // ==============================================================
+  // ==========================================
+  // PEGA AQUÍ TUS CREDENCIALES
+  // ==========================================
+  const SUPABASE_URL = 'https://gjllfpeoiwctciuqifnt.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdqbGxmcGVvaXdjdGNpdXFpZm50Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMyODUyNjEsImV4cCI6MjEwODg2MTI2MX0.oAy09RwLboczMa_PxdqGrTwV4YdSfg5axxYA8XbzxsA';
+  // ==========================================
 
   const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-  let productos = [], categorias = [], carrito = [];
+  let productos = [], categorias = [], insumos = [], carrito = [];
 
   const $ = s => document.querySelector(s);
   const money = n => 'S/ ' + Number(n).toFixed(2);
+  
+  function toast(msg) {
+    const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg;
+    document.body.appendChild(t); setTimeout(() => t.remove(), 3000);
+  }
 
   // LOGIN
   $('#btnLogin').onclick = async () => {
-    const email = $('#email').value.trim();
-    const password = $('#password').value;
-    $('#btnLogin').disabled = true;
-    $('#loginError').style.display = 'none';
-
-    const { data, error } = await db.auth.signInWithPassword({ email, password });
-    
-    if (error) {
-      $('#loginError').textContent = error.message === 'Invalid login credentials' ? 'Correo o contraseña incorrectos.' : error.message;
-      $('#loginError').style.display = 'block';
-      $('#btnLogin').disabled = false;
-    } else {
-      initApp();
-    }
+    const { error } = await db.auth.signInWithPassword({ email: $('#email').value.trim(), password: $('#password').value });
+    if (error) { $('#loginError').style.display = 'block'; } 
+    else { initApp(); }
   };
 
-  // INICIALIZACIÓN
   async function initApp() {
     const { data: { user } } = await db.auth.getUser();
     if (!user) return;
-
-    const { data: perfil } = await db.from('perfiles').select('nombre').eq('id', user.id).single();
-    $('#userName').textContent = perfil ? perfil.nombre : 'Cajero';
-    
     $('#loginScreen').classList.add('hide');
     $('#app').classList.remove('hide');
-
     await cargarDatos();
   }
 
+  // NAVEGACIÓN
+  document.querySelectorAll('.sidebar button[data-view]').forEach(btn => {
+    btn.onclick = () => {
+      document.querySelectorAll('.sidebar button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const view = btn.dataset.view;
+      $('#view-pos').classList.toggle('hide', view !== 'pos');
+      $('#view-admin').classList.toggle('hide', view !== 'admin');
+      $('#viewTitle').textContent = view === 'pos' ? 'Punto de Venta' : 'Administración';
+    };
+  });
+
   // CARGAR DATOS
   async function cargarDatos() {
-    // Cargar Categorías
-    const { data: cats } = await db.from('categorias').select('*').eq('activo', true);
+    const { data: cats } = await db.from('categorias').select('*');
     categorias = cats || [];
-    
-    // Cargar Productos
+    $('#cats-list').innerHTML = categorias.map(c => `<option value="${c.nombre}">`).join('');
+
     const { data: prods } = await db.from('productos').select('*').eq('activo', true).order('nombre');
     productos = prods || [];
+
+    const { data: ins } = await db.from('insumos').select('*').order('nombre');
+    insumos = ins || [];
 
     renderCategorias();
     renderProductos('all');
   }
 
-  // RENDERIZAR CATEGORÍAS
+  // --- LÓGICA POS ---
   function renderCategorias() {
     const container = $('#categories');
-    const html = categorias.map(c => `<button data-cat="${c.id}">${c.nombre}</button>`).join('');
-    container.innerHTML = `<button class="active" data-cat="all">Todas</button>` + html;
-
+    container.innerHTML = `<button class="active" data-cat="all">Todas</button>` + categorias.map(c => `<button data-cat="${c.id}">${c.nombre}</button>`).join('');
     container.onclick = (e) => {
-      const btn = e.target.closest('button');
-      if (!btn) return;
+      const btn = e.target.closest('button'); if (!btn) return;
       container.querySelectorAll('button').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      renderProductos(btn.dataset.cat);
+      btn.classList.add('active'); renderProductos(btn.dataset.cat);
     };
   }
 
-  // RENDERIZAR PRODUCTOS
   function renderProductos(catId) {
-    const grid = $('#productsGrid');
     const filtrados = catId === 'all' ? productos : productos.filter(p => p.categoria_id === catId);
-
-    grid.innerHTML = filtrados.map(p => `
+    $('#productsGrid').innerHTML = filtrados.map(p => `
       <button class="card-prod" onclick="agregarAlCarrito('${p.id}')">
-        <h3>${p.nombre}</h3>
-        <span class="price">${money(p.precio)}</span>
+        <h3>${p.nombre}</h3><span class="price">${money(p.precio)}</span>
       </button>
     `).join('');
   }
 
-  // CARRITO
   window.agregarAlCarrito = (id) => {
     const prod = productos.find(p => p.id === id);
     const item = carrito.find(i => i.producto_id === id);
-
-    if (item) {
-      item.cantidad++;
-    } else {
-      carrito.push({ producto_id: id, nombre: prod.nombre, precio: prod.precio, cantidad: 1 });
-    }
+    if (item) item.cantidad++;
+    else carrito.push({ producto_id: id, nombre: prod.nombre, precio: prod.precio, cantidad: 1 });
     renderCarrito();
   };
 
   window.cambiarCantidad = (id, delta) => {
     const item = carrito.find(i => i.producto_id === id);
-    if (!item) return;
-    item.cantidad += delta;
-    if (item.cantidad <= 0) carrito = carrito.filter(i => i.producto_id !== id);
-    renderCarrito();
+    if (item) { item.cantidad += delta; if (item.cantidad <= 0) carrito = carrito.filter(i => i.producto_id !== id); renderCarrito(); }
   };
 
   function renderCarrito() {
-    const container = $('#cartItems');
-    const btnPay = $('#btnPay');
-    
     if (carrito.length === 0) {
-      container.innerHTML = '<p style="color: var(--muted); text-align: center; margin-top: 40px;">Selecciona productos</p>';
-      $('#cartTotal').textContent = 'S/ 0.00';
-      btnPay.disabled = true;
-      return;
+      $('#cartItems').innerHTML = '<p style="color: var(--muted); text-align: center; margin-top: 40px;">Selecciona productos</p>';
+      $('#cartTotal').textContent = 'S/ 0.00'; $('#btnPay').disabled = true; return;
     }
-
-    container.innerHTML = carrito.map(i => `
+    $('#cartItems').innerHTML = carrito.map(i => `
       <div class="cart-item">
-        <div class="cart-item-info">
-          <h4>${i.nombre}</h4>
-          <span>${money(i.precio)} x ${i.cantidad}</span>
-        </div>
+        <div class="cart-item-info"><h4>${i.nombre}</h4><span>${money(i.precio)} x ${i.cantidad}</span></div>
         <div class="qty-controls">
           <button onclick="cambiarCantidad('${i.producto_id}', -1)">-</button>
           <span>${i.cantidad}</span>
@@ -279,25 +286,95 @@ header h1 { margin: 0; font-size: 20px; font-weight: 700; }
         </div>
       </div>
     `).join('');
-
-    const total = carrito.reduce((sum, i) => sum + (i.precio * i.cantidad), 0);
-    $('#cartTotal').textContent = money(total);
-    btnPay.disabled = false;
+    $('#cartTotal').textContent = money(carrito.reduce((s, i) => s + (i.precio * i.cantidad), 0));
+    $('#btnPay').disabled = false;
   }
 
   $('#btnClear').onclick = () => { carrito = []; renderCarrito(); };
 
-  // LOGOUT
-  $('#btnLogout').onclick = async () => {
-    await db.auth.signOut();
-    location.reload();
+  // --- LÓGICA ADMINISTRACIÓN ---
+  
+  // Guardar Insumo
+  $('#btnSaveInsumo').onclick = async () => {
+    const nombre = $('#ins_nombre').value;
+    const unidad = $('#ins_unidad').value;
+    const stock = parseFloat($('#ins_stock').value) || 0;
+    const min = parseFloat($('#ins_min').value) || 0;
+    if (!nombre || !unidad) return toast('Completa nombre y unidad');
+
+    const { error } = await db.from('insumos').insert([{ nombre, unidad, stock_inicial: stock, stock_actual: stock, stock_minimo: min }]);
+    if (error) return toast(error.message);
+
+    toast('Insumo creado exitosamente');
+    $('#ins_nombre').value = ''; $('#ins_unidad').value = '';
+    await cargarDatos();
   };
 
-  // INICIAR SESIÓN SI YA ESTÁ LOGUEADO
-  db.auth.getSession().then(({ data }) => {
-    if (data.session) initApp();
-  });
+  // Agregar campo de insumo en el formulario de producto
+  $('#btnAddInsumo').onclick = () => {
+    const div = document.createElement('div');
+    div.className = 'insumo-row';
+    div.innerHTML = `
+      <select class="ins-select" style="flex:2; margin:0;">
+        <option value="">Seleccionar insumo...</option>
+        ${insumos.map(i => `<option value="${i.id}">${i.nombre} (${i.unidad})</option>`).join('')}
+      </select>
+      <input type="number" class="ins-qty" placeholder="Cant." style="flex:1; margin:0;">
+      <button class="btn-danger btn-remove">X</button>
+    `;
+    div.querySelector('.btn-remove').onclick = () => div.remove();
+    $('#lista_insumos').appendChild(div);
+  };
 
+  // Guardar Producto + Receta
+  $('#btnSaveProducto').onclick = async () => {
+    const nombre = $('#prod_nombre').value;
+    const categoria = $('#prod_categoria').value;
+    const precio = parseFloat($('#prod_precio').value);
+    
+    if (!nombre || !categoria || isNaN(precio)) return toast('Completa los datos del producto');
+
+    // Recolectar la receta
+    const receta = [];
+    let errorReceta = false;
+
+    document.querySelectorAll('.insumo-row').forEach(row => {
+      const insumoId = row.querySelector('.ins-select').value;
+      const cant = parseFloat(row.querySelector('.ins-qty').value);
+      if (!insumoId || isNaN(cant) || cant <= 0) errorReceta = true;
+      else receta.push({ insumo_id: insumoId, cantidad: cant });
+    });
+
+    if (receta.length === 0 || errorReceta) {
+      return toast('Debes agregar al menos un insumo válido a la receta');
+    }
+
+    $('#btnSaveProducto').disabled = true;
+
+    // Llamar a la función RPC que creamos en SQL
+    const { data, error } = await db.rpc('crear_producto_con_receta', {
+      p_nombre: nombre,
+      p_categoria: categoria,
+      p_precio: precio,
+      p_receta: receta
+    });
+
+    $('#btnSaveProducto').disabled = false;
+
+    if (error) {
+      toast('Error: ' + error.message);
+    } else {
+      toast('Producto y receta guardados con éxito');
+      $('#prod_nombre').value = ''; $('#prod_precio').value = ''; $('#lista_insumos').innerHTML = '';
+      await cargarDatos();
+    }
+  };
+
+  // LOGOUT
+  $('#btnLogout').onclick = async () => { await db.auth.signOut(); location.reload(); };
+
+  // AUTO-LOGIN
+  db.auth.getSession().then(({ data }) => { if (data.session) initApp(); });
 </script>
 </body>
 </html>
